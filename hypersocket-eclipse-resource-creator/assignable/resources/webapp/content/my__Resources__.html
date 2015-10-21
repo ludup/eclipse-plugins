@@ -1,0 +1,29 @@
+<div id="personal<Resources>">
+
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+				$('#personal<Resources>').localize();
+
+				$('#personal<Resources>').ajaxResourcePage(
+						{
+							id : "<Resources>",
+							tableUrl : "<resources>/personal",
+							title: getResource("<resources>.label"),
+							icon: 'fa-folder-open',
+							resourceUrl : "<resources>",
+							fields : [ {
+								name : "name"
+							}],
+							resourceKey : "<resource>",
+							canCreate: false,
+							canUpdate: false,
+							canDelete: false,
+							complete : function() {
+								loadComplete();
+							}
+						});
+
+			});
+</script>

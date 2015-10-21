@@ -1,0 +1,123 @@
+<!-- 
+	Replace any <Resource> or <Resources> with Capitalized name of your resources e.g. Application or Applications
+	Replace any <resource> or <resources> with lower case name of your resources e.g. application or applications
+ -->
+
+<div id="content<Resources>">
+	<div class="modal" id="add<Resource>Form" tabindex="-1" role="dialog" dialog-for="content<Resources>">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title"></h4>
+				</div>
+				<div class="modal-body">
+					<div class="propertyItem form-group">
+						<label class="col-xs-3 control-label" localize="<resource>.name.label"></label>
+						<div class="propertyValue col-xs-9">
+							<input type="text" class="form-control"
+								placeholder="" id="resourceName" maxlength="" name="resourceName" value="">
+							<div>
+								<span class="help-block" localize="<resource>.name.info"></span>
+							</div>
+						</div>
+					</div>
+					
+					<div id="<resource>Properties"></div>
+					<input type="hidden" id="resourceId" name="resourceId" value="" />
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+				$('#content<Resources>').localize();
+				
+				$('#<resource>Properties').propertyPage({
+					url : '<resources>/template',
+					showButtons : false,
+					useTemplates : true,
+					canUpdate : currentMenu.canUpdate
+				});
+
+				$('#content<Resources>').ajaxResourcePage(
+						{
+							id : "<Resource>",
+							tableUrl : "<resources>/table",
+							title: getResource("<resources>.label"),
+							icon: '<resourceIcon>',
+							resourceUrl : "<resources>/<resource>",
+							fields : [ {
+								name : "name"
+							}],
+							resourceKey : "<resource>",
+							canCreate: currentMenu.canCreate,
+							canUpdate: currentMenu.canUpdate,
+							canDelete: currentMenu.canDelete,
+							validate : function() {
+
+								if ($('#resourceName').val() == '') {
+									showError("error.nameRequired");
+									return false;
+								}
+
+								if(!$('#<resource>Properties').validateProperties()) {
+									showError("error.correctValidationErrors");
+									return false;
+								}
+								
+								return true;
+							},
+							clearDialog : function(create) {
+								
+								$('#resourceId').val('');
+								$('#resourceName').val('');
+								
+								$('#<resource>Properties').clearProperties();
+								if(create) {
+									$('#<resource>Properties').propertyPage({ 
+										url : '<resources>/template/', 
+										showButtons : false, 
+										canUpdate : currentMenu.canUpdate, 
+										useTemplates : true 
+									});
+								}
+
+								$('.tabPropertiesTab').first().trigger('click');
+							},
+							createResource : function() {
+								resource = new Object();
+								resource.id = $('#resourceId').val();
+								resource.name = $('#resourceName').val();
+								
+								$('#<resource>Properties').saveProperties(true,
+										function(items) {
+											resource.properties = items;
+								});
+								
+								return resource;
+							},
+							displayResource : function(resource, readOnly) {
+								
+								$('#resourceId').val(resource.id);
+								$('#resourceName').val(resource.name);
+								
+								$('#<resource>Properties').propertyPage(
+										{ url : '<resources>/properties/' + resource.id, 
+											showButtons : false, 
+											canUpdate : currentMenu.canUpdate && !readOnly
+								});
+							
+							},
+							complete : function() {
+								loadComplete();
+							}
+						});
+
+			});
+</script>

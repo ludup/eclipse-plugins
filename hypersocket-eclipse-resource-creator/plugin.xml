@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="hypersocket-eclipse-resource-creator"
+            name="Hypersocket">
+      </category>
+      <wizard
+            category="hypersocket-eclipse-resource-creator"
+            class="com.hypersocket.eclipse.resources.NewResourceWizard"
+            icon="icons/hypersocket-icon16x16.png"
+            id="com.hypersocket.eclipse.resources.NewResourceWizard"
+            name="New Resource">
+      </wizard>
+   </extension>
+
+</plugin>
