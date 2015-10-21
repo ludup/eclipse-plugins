@@ -179,7 +179,7 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 	
 	private void copyResources(String sourcePath, boolean assignable, File target, String resourceName, String packageName, String icon) throws URISyntaxException, IOException {
 	
-		Bundle bundle = Platform.getBundle("hypersocket-eclipse-resource-creator");
+		Bundle bundle = Platform.getBundle("com.hypersocket.eclipse.resource.creator");
 		Path path = new Path(assignable ? "assignable" : "resource", sourcePath);
 		URL fileURL = FileLocator.find(bundle, path, null);
 		File sourceRoot = new File(FileLocator.resolve(fileURL).toURI());
