@@ -35,17 +35,13 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  * OR with the extension that matches the expected one (.java).
  */
 
-public class NewResourceWizardPage extends WizardPage {
+public class NewTaskWizardPage extends WizardPage {
 	private Text containerText;
 
 	private Text fileText;
 	
 	private Text packageText;
-	
-	private Text iconText;
 
-	private Button assignableResource;
-	
 	private ISelection selection;
 	
 	private IProject selectedProject;
@@ -56,10 +52,10 @@ public class NewResourceWizardPage extends WizardPage {
 	 * 
 	 * @param pageName
 	 */
-	public NewResourceWizardPage(ISelection selection) {
+	public NewTaskWizardPage(ISelection selection) {
 		super("wizardPage");
-		setTitle("New Hypersocket Resource");
-		setDescription("This wizard creates a new Hypersocket resource entity");
+		setTitle("New Hypersocket Task");
+		setDescription("This wizard creates a new Hypersocket task");
 		this.selection = selection;
 	}
 
@@ -94,7 +90,7 @@ public class NewResourceWizardPage extends WizardPage {
 		});
 		
 		label = new Label(container, SWT.NULL);
-		label.setText("&Resource Name:");
+		label.setText("&Task Name:");
 
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -118,32 +114,6 @@ public class NewResourceWizardPage extends WizardPage {
 				dialogChanged();
 			}
 		});
-		
-		
-		label = new Label(container, SWT.NULL);
-		label.setText("&Icon Name:");
-
-		iconText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		iconText.setText("fa-flash");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		iconText.setLayoutData(gd);
-		iconText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
-			}
-		});
-		
-		label = new Label(container, SWT.NULL);
-		label.setText("");
-		
-		assignableResource = new Button(container, SWT.CHECK);
-		
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		assignableResource.setLayoutData(gd);
-		
-		assignableResource.setText("This resource will be assignable to users via Roles");
 		
 		initialize();
 		dialogChanged();
@@ -233,16 +203,16 @@ public class NewResourceWizardPage extends WizardPage {
 		}
 		
 		if (resourceName.length() == 0) {
-			updateStatus("Resource name must be specified");
+			updateStatus("Task name must be specified");
 			return;
 		}
 		if (resourceName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus("Resource name must be valid");
+			updateStatus("Task name must be valid");
 			return;
 		}
 		
 		if(!JavaConventions.validateJavaTypeName(resourceName).isOK()) {
-			updateStatus("Resource name will not generate a valid Java class");
+			updateStatus("Task name will not generate a valid Java class");
 			return;
 		}
 		
@@ -274,14 +244,6 @@ public class NewResourceWizardPage extends WizardPage {
 	
 	public String getPackageName() {
 		return packageText.getText();
-	}
-	
-	public String getIconName() {
-		return iconText.getText();
-	}
-
-	public boolean isAssignable() {
-		return assignableResource.getSelection();
 	}
 
 	public IProject getSelectedProject() {

@@ -1,6 +1,5 @@
 package com.hypersocket.eclipse.resources;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
 
 public class FileHelper {
 
@@ -41,7 +45,7 @@ public class FileHelper {
 		return buf.toString();
 	}
 
-	public static void copyTree(File sourcePath, File targetFile, final String resourceName, final String packageName,
+	public static void copyTree(IFile sourcePath, IFile targetFile, final String resourceName, final String packageName,
 			final String resourceIcon) throws IOException {
 
 		final String _resource = lowerCaseFirst(resourceName);
@@ -50,7 +54,22 @@ public class FileHelper {
 		final String _Resources = _Resource + "s";
 		final String resourceDesc = createDescription(resourceName);
 
-		final Path source = sourcePath.toPath();
+		sourcePath.accept(new IResourceVisitor() {
+			
+			@Override
+			public boolean visit(IResource child) throws CoreException {
+				if(child.getType()==IResource.FOLDER) {
+					targetFile.getFullPath().append(child.
+				}
+					child.copy(child, true, null);
+					return true;
+				} else {if(child.getType()==IResource.FILE) {
+					
+				}
+				return false;
+			}
+		});
+		final Path source = sourcePath.
 		final Path target = targetFile.toPath();
 
 		Files.walkFileTree(source, EnumSet.of(FileVisitOption.FOLLOW_LINKS), Integer.MAX_VALUE,
@@ -76,6 +95,7 @@ public class FileHelper {
 						filename = filename.replace("__Resource__", _Resource);
 						filename = filename.replace("__Resources__", _Resources);
 						filename = filename.replace("TemplateResource", resourceName + "Resource");
+						filename = filename.replace("TemplateTask", resourceName + "Task");
 						filename = filename.replace("TemplateAssignableResource", resourceName + "Resource");
 
 						Charset charset = StandardCharsets.UTF_8;
@@ -84,6 +104,7 @@ public class FileHelper {
 
 						content = content.replaceAll("com.hypersocket.resource", packageName);
 						content = content.replaceAll("com.hypersocket.assignable", packageName);
+						content = content.replaceAll("com.hypersocket.template.task", packageName);
 						
 						content = content.replaceAll("<resource>", _resource);
 						content = content.replaceAll("<resources>", _resources);

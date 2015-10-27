@@ -1,9 +1,7 @@
 package com.hypersocket.eclipse.resources;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -47,14 +45,14 @@ import org.osgi.framework.Bundle;
  * be able to open it.
  */
 
-public class NewResourceWizard extends Wizard implements INewWizard {
-	private NewResourceWizardPage page;
+public class NewTaskWizard extends Wizard implements INewWizard {
+	private NewTaskWizardPage page;
 	private ISelection selection;
 
 	/**
 	 * Constructor for NewResourceWizard.
 	 */
-	public NewResourceWizard() {
+	public NewTaskWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -64,7 +62,7 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new NewResourceWizardPage(selection);
+		page = new NewTaskWizardPage(selection);
 		addPage(page);
 	}
 
@@ -79,13 +77,11 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 		final String containerName = page.getContainerName();
 		final String resourceName = page.getResourceName();
 		final String packageName = page.getPackageName();
-		final String iconName = page.getIconName();
-		final boolean assignable = page.isAssignable();
 		
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
-					doFinish(project, containerName, resourceName, packageName, assignable, iconName, monitor);
+					doFinish(project, containerName, resourceName, packageName, monitor);
 				} catch (CoreException e) {
 					throw new InvocationTargetException(e);
 				} finally {
@@ -116,8 +112,6 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 		String containerName,
 		String resourceName,
 		String packageName, 
-		boolean assignable,
-		String icon,
 		IProgressMonitor monitor)
 		throws CoreException {
 		// create a sample file
@@ -162,8 +156,8 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 			newPackage = new File(new URI(sourceFolder.getRawLocationURI().toASCIIString() + "/" + packageName.replace('.', java.io.File.separatorChar)));
 			newPackage.mkdirs();
 			
-			copyResources("/src/com/hypersocket/" + (assignable ? "assignable" : "resource"), assignable, newPackage, resourceName, packageName, "fa-flash");
-			copyResources("/resources", assignable, new File(new URI(resourceFolder.getRawLocationURI().toASCIIString())), resourceName, packageName, "fa-flash");
+			copyResources("/src/com/hypersocket/template/task", newPackage, resourceName, packageName, "fa-flash");
+			copyResources("/resources", new File(new URI(resourceFolder.getRawLocationURI().toASCIIString())), resourceName, packageName, "fa-flash");
 
 		} catch (Exception e1) {
 			throwCoreException(e1.getMessage());
@@ -179,10 +173,10 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 		
 	}
 	
-	private void copyResources(String sourcePath, boolean assignable, File target, String resourceName, String packageName, String icon) throws URISyntaxException, IOException {
+	private void copyResources(String sourcePath, File target, String resourceName, String packageName, String icon) throws URISyntaxException, IOException {
 	
 		Bundle bundle = Platform.getBundle("com.hypersocket.eclipse.resource.creator");
-		Path path = new Path(assignable ? "assignable" : "resource", sourcePath);
+		Path path = new Path("task", sourcePath);
 		URL fileURL = FileLocator.find(bundle, path, null);
 		File sourceRoot = new File(FileLocator.resolve(fileURL).toURI());
 		FileHelper.copyTree(sourceRoot, target, resourceName, packageName, icon);

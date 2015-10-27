@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<propertyTemplates context="<resource>Task">
+	<propertyCategory resourceKey="category.<resource>Task"
+		resourceBundle="<Resource>Task" weight="1000">
+		<property resourceKey="<resource>.example.text" inputType="text"
+			weight="0" defaultValue="" size="50" />
+		<property resourceKey="<resource>.example.switch" inputType="switch"
+			weight="100" defaultValue="true" />
+		<property resourceKey="<resource>.example.select" inputType="select"
+			weight="100" defaultValue="option.3" options="option.1,option.2,option.3"/>
+	</propertyCategory>
+</propertyTemplates>
