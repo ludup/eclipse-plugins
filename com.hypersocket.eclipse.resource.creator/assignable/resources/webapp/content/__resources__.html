@@ -54,13 +54,10 @@
 					showButtons : false,
 					useTemplates : true,
 					canUpdate : currentMenu.canUpdate,
-					additionalTabs : [ {
-						id : "tabDetails",
-						name : getResource("<resource>.details.label")
-					},
-					{
-						id : "tabRoles",
-						name : getResource("label.roles")
+					propertyTabsLast: false,
+					additionalTabs : [{
+							id : "tabRoles",
+							name : getResource("label.roles")
 					}]
 				});
 
@@ -103,7 +100,12 @@
 										url : '<resources>/template/', 
 										showButtons : false, 
 										canUpdate : currentMenu.canUpdate, 
-										useTemplates : true 
+										useTemplates : true,
+										propertyTabsLast: false,
+										additionalTabs : [{
+												id : "tabRoles",
+												name : getResource("label.roles")
+										}] 
 									});
 								}
 								
@@ -133,7 +135,12 @@
 								$('#<resource>Properties').propertyPage(
 										{ url : '<resources>/properties/' + resource.id, 
 											showButtons : false, 
-											canUpdate : currentMenu.canUpdate && !readOnly
+											canUpdate : currentMenu.canUpdate && !readOnly,
+											propertyTabsLast: false,
+											additionalTabs : [{
+													id : "tabRoles",
+													name : getResource("label.roles")
+											}]
 								});
 								
 								$('#tabRoles').multipleSelect({

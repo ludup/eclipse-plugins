@@ -10,14 +10,14 @@ public class TemplateTaskResult extends TaskResult {
 
 	public static final String EVENT_RESOURCE_KEY = "<resource>.result";
 	
-	public TemplateTaskResult(Object source, String resourceKey,
+	public TemplateTaskResult(Object source, 
 			boolean success, Realm currentRealm, Task task) {
-		super(source, resourceKey, success, currentRealm, task);
+		super(source, EVENT_RESOURCE_KEY, success, currentRealm, task);
 	}
 
-	public TemplateTaskResult(Object source, String resourceKey, Throwable e,
+	public TemplateTaskResult(Object source, Throwable e,
 			Realm currentRealm, Task task) {
-		super(source, resourceKey, e, currentRealm, task);
+		super(source, EVENT_RESOURCE_KEY, e, currentRealm, task);
 	}
 
 	@Override

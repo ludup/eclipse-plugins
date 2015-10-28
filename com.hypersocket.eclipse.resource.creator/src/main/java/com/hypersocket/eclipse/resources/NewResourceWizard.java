@@ -124,6 +124,9 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 		monitor.beginTask("Creating package " + packageName, 2);
 		
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		if(containerName.startsWith("/")) {
+			containerName = containerName.substring(1);
+		}
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Project \"" + containerName + "\" does not exist.");
@@ -140,7 +143,7 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 					resourcesPath = cp;
 				} else if(cp.getPath().toString().endsWith("src")) {
 					sourcePath = cp;
-				} else if(cp.getPath().toString().endsWith("resources")) {
+				} else if(cp.getPath().toString().endsWith("resources") && !cp.getPath().toString().endsWith("src/test/resources")) {
 					resourcesPath = cp;
 				}
 			}
@@ -161,9 +164,18 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 		try {
 			newPackage = new File(new URI(sourceFolder.getRawLocationURI().toASCIIString() + "/" + packageName.replace('.', java.io.File.separatorChar)));
 			newPackage.mkdirs();
+			new File(newPackage, "events").mkdir();
+			new File(newPackage, "json").mkdir();
 			
-			copyResources("/src/com/hypersocket/" + (assignable ? "assignable" : "resource"), assignable, newPackage, resourceName, packageName, "fa-flash");
-			copyResources("/resources", assignable, new File(new URI(resourceFolder.getRawLocationURI().toASCIIString())), resourceName, packageName, "fa-flash");
+			File newResources = new File(new URI(resourceFolder.getRawLocationURI().toASCIIString()));
+			new File(newResources, "i18n").mkdirs();
+			new File(newResources, "webapp/content").mkdirs();
+			
+			if(assignable) {
+				copyAssignable(newPackage, newResources, resourceName, packageName, icon);
+			} else {
+				copyResource(newPackage, newResources, resourceName, packageName, icon);
+			}
 
 		} catch (Exception e1) {
 			throwCoreException(e1.getMessage());
@@ -179,13 +191,96 @@ public class NewResourceWizard extends Wizard implements INewWizard {
 		
 	}
 	
-	private void copyResources(String sourcePath, boolean assignable, File target, String resourceName, String packageName, String icon) throws URISyntaxException, IOException {
+	private void copyAssignable(File newPackage, File newResources, String resourceName, String packageName, String icon) throws URISyntaxException, IOException, CoreException {
+		
+		String _resource = FileHelper.lowerCaseFirst(resourceName);
+		String _resources = _resource + "s";
+		
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResource.java",
+				new File(newPackage, resourceName + "Resource.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResourceColumns.java",
+				new File(newPackage, resourceName + "ResourceColumns.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResourcePermission.java",
+				new File(newPackage, resourceName + "ResourcePermission.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResourceRepository.java",
+				new File(newPackage, resourceName + "ResourceRepository.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResourceRepositoryImpl.java",
+				new File(newPackage, resourceName + "ResourceRepositoryImpl.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResourceService.java",
+				new File(newPackage, resourceName + "ResourceService.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/TemplateAssignableResourceServiceImpl.java",
+				new File(newPackage, resourceName + "ResourceServiceImpl.java"), resourceName, packageName, icon);
+
+		copyResource("assignable/src/com/hypersocket/assignable/events/TemplateAssignableResourceCreatedEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceCreatedEvent.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/events/TemplateAssignableResourceDeletedEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceDeletedEvent.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/events/TemplateAssignableResourceEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceEvent.java"), resourceName, packageName, icon);
+		copyResource("assignable/src/com/hypersocket/assignable/events/TemplateAssignableResourceUpdatedEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceUpdatedEvent.java"), resourceName, packageName, icon);
+		
+		copyResource("assignable/src/com/hypersocket/assignable/json/TemplateAssignableResourceController.java",
+				new File(newPackage, "json" + File.separator + resourceName + "ResourceController.java"), resourceName, packageName, icon);
+
+		copyResource("assignable/resources/i18n/TemplateAssignableResourceService.properties",			
+				new File(newResources, "i18n" + File.separator + resourceName + "ResourceService.properties"), resourceName, packageName, icon);
+		copyResource("assignable/resources/__resource__ResourceTemplate.xml",			
+				new File(newResources, _resource + "ResourceTemplate.xml"), resourceName, packageName, icon);
+		copyResource("assignable/resources/webapp/content/__resources__.html",			
+				new File(newResources, "webapp" + File.separator + "content" + File.separator + _resources + ".html"), resourceName, packageName, icon);
+		copyResource("assignable/resources/webapp/content/my__Resources__.html",			
+				new File(newResources, "webapp" + File.separator + "content" + File.separator + "my" + resourceName + "s.html"), resourceName, packageName, icon);
+		
+	}
+	
+	private void copyResource(File newPackage, File newResources, String resourceName, String packageName, String icon) throws URISyntaxException, IOException, CoreException {
+		
+		String _resource = FileHelper.lowerCaseFirst(resourceName);
+		String _resources = _resource + "s";
+		
+		copyResource("resource/src/com/hypersocket/template/TemplateResource.java",
+				new File(newPackage, resourceName + "Resource.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/TemplateResourceColumns.java",
+				new File(newPackage, resourceName + "ResourceColumns.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/TemplateResourcePermission.java",
+				new File(newPackage, resourceName + "ResourcePermission.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/TemplateResourceRepository.java",
+				new File(newPackage, resourceName + "ResourceRepository.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/TemplateResourceRepositoryImpl.java",
+				new File(newPackage, resourceName + "ResourceRepositoryImpl.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/TemplateResourceService.java",
+				new File(newPackage, resourceName + "ResourceService.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/TemplateResourceServiceImpl.java",
+				new File(newPackage, resourceName + "ResourceServiceImpl.java"), resourceName, packageName, icon);
+
+		copyResource("resource/src/com/hypersocket/template/events/TemplateResourceCreatedEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceCreatedEvent.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/events/TemplateResourceDeletedEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceDeletedEvent.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/events/TemplateResourceEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceEvent.java"), resourceName, packageName, icon);
+		copyResource("resource/src/com/hypersocket/template/events/TemplateResourceUpdatedEvent.java",
+				new File(newPackage, "events" + File.separator + resourceName + "ResourceUpdatedEvent.java"), resourceName, packageName, icon);
+		
+		copyResource("resource/src/com/hypersocket/template/json/TemplateResourceController.java",
+				new File(newPackage, "json" + File.separator + resourceName + "ResourceController.java"), resourceName, packageName, icon);
+
+		copyResource("resource/resources/i18n/__Resource__ResourceService.properties",			
+				new File(newResources, "i18n" + File.separator + resourceName + "ResourceService.properties"), resourceName, packageName, icon);
+		copyResource("resource/resources/__resource__ResourceTemplate.xml",			
+				new File(newResources, _resource + "ResourceTemplate.xml"), resourceName, packageName, icon);
+		copyResource("resource/resources/webapp/content/__resources__.html",			
+				new File(newResources, "webapp" + File.separator + "content" + File.separator + _resources + ".html"), resourceName, packageName, icon);
+	}
+
+	private void copyResource(String sourcePath, File target, String resourceName, String packageName, String icon) throws URISyntaxException, IOException, CoreException {
 	
 		Bundle bundle = Platform.getBundle("com.hypersocket.eclipse.resource.creator");
-		Path path = new Path(assignable ? "assignable" : "resource", sourcePath);
-		URL fileURL = FileLocator.find(bundle, path, null);
-		File sourceRoot = new File(FileLocator.resolve(fileURL).toURI());
-		FileHelper.copyTree(sourceRoot, target, resourceName, packageName, icon);
+		Path path = new Path(sourcePath);
+		URL sourceURL = FileLocator.find(bundle, path, null);
+		FileHelper.copyResource(sourceURL, target, resourceName, packageName, icon);
+		
 	}
 	
 	private void throwCoreException(String message) throws CoreException {

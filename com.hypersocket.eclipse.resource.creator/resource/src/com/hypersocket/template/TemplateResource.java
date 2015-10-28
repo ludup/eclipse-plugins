@@ -1,7 +1,9 @@
-package com.hypersocket.resource;
+package com.hypersocket.template;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.hypersocket.resource.RealmResource;
 
 @Entity
 @Table(name="<resource>_resource")

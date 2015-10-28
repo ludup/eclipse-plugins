@@ -118,6 +118,9 @@ public class NewTaskWizard extends Wizard implements INewWizard {
 		monitor.beginTask("Creating package " + packageName, 2);
 		
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		if(containerName.startsWith("/")) {
+			containerName = containerName.substring(1);
+		}
 		IResource resource = root.findMember(new Path(containerName));
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Project \"" + containerName + "\" does not exist.");
@@ -134,7 +137,7 @@ public class NewTaskWizard extends Wizard implements INewWizard {
 					resourcesPath = cp;
 				} else if(cp.getPath().toString().endsWith("src")) {
 					sourcePath = cp;
-				} else if(cp.getPath().toString().endsWith("resources")) {
+				} else if(cp.getPath().toString().endsWith("resources") && !cp.getPath().toString().endsWith("src/test/resources")) {
 					resourcesPath = cp;
 				}
 			}
@@ -156,9 +159,11 @@ public class NewTaskWizard extends Wizard implements INewWizard {
 			newPackage = new File(new URI(sourceFolder.getRawLocationURI().toASCIIString() + "/" + packageName.replace('.', java.io.File.separatorChar)));
 			newPackage.mkdirs();
 			
-			copyResources("/src/com/hypersocket/template/task", newPackage, resourceName, packageName, "fa-flash");
-			copyResources("/resources", new File(new URI(resourceFolder.getRawLocationURI().toASCIIString())), resourceName, packageName, "fa-flash");
+			File newResources = new File(new URI(resourceFolder.getRawLocationURI().toASCIIString()));
+			new File(newResources, "i18n").mkdirs();
+			new File(newResources, "tasks").mkdirs();
 
+			copyTask(newPackage, newResources, resourceName, packageName);
 		} catch (Exception e1) {
 			throwCoreException(e1.getMessage());
 		}
@@ -173,13 +178,33 @@ public class NewTaskWizard extends Wizard implements INewWizard {
 		
 	}
 	
-	private void copyResources(String sourcePath, File target, String resourceName, String packageName, String icon) throws URISyntaxException, IOException {
+	private void copyTask(File newPackage, File newResources, String resourceName, String packageName) throws URISyntaxException, IOException, CoreException {
+		
+		String _resource = FileHelper.lowerCaseFirst(resourceName);
+		
+		copyResource("task/src/com/hypersocket/template/task/TemplateTask.java",
+				new File(newPackage, resourceName + "Task.java"), resourceName, packageName);
+		copyResource("task/src/com/hypersocket/template/task/TemplateTaskRepository.java",
+				new File(newPackage, resourceName + "TaskRepository.java"), resourceName, packageName);
+		copyResource("task/src/com/hypersocket/template/task/TemplateTaskRepositoryImpl.java",
+				new File(newPackage, resourceName + "TaskRepositoryImpl.java"), resourceName, packageName);
+		copyResource("task/src/com/hypersocket/template/task/TemplateTaskResult.java",
+				new File(newPackage, resourceName + "TaskResult.java"), resourceName, packageName);
+
+		copyResource("task/i18n/__Resource__Task.properties",			
+				new File(newResources, "i18n" + File.separator + resourceName + "Task.properties"), resourceName, packageName);
+		copyResource("task/tasks/__resource__Task.xml",			
+				new File(newResources, "tasks" + File.separator + _resource + "Task.xml"), resourceName, packageName);
+		
+	}
+
+	private void copyResource(String sourcePath, File target, String resourceName, String packageName) throws URISyntaxException, IOException, CoreException {
 	
 		Bundle bundle = Platform.getBundle("com.hypersocket.eclipse.resource.creator");
-		Path path = new Path("task", sourcePath);
-		URL fileURL = FileLocator.find(bundle, path, null);
-		File sourceRoot = new File(FileLocator.resolve(fileURL).toURI());
-		FileHelper.copyTree(sourceRoot, target, resourceName, packageName, icon);
+		Path path = new Path(sourcePath);
+		URL sourceURL = FileLocator.find(bundle, path, null);
+		FileHelper.copyResource(sourceURL, target, resourceName, packageName, "fa-flash");
+		
 	}
 	
 	private void throwCoreException(String message) throws CoreException {

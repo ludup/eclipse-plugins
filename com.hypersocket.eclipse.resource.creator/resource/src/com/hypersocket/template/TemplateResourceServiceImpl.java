@@ -1,4 +1,4 @@
-package com.hypersocket.resource;
+package com.hypersocket.template;
 
 import java.util.Collection;
 import java.util.Map;
@@ -17,10 +17,14 @@ import com.hypersocket.permissions.PermissionCategory;
 import com.hypersocket.permissions.PermissionService;
 import com.hypersocket.properties.PropertyCategory;
 import com.hypersocket.realm.Realm;
-import com.hypersocket.resource.events.TemplateResourceCreatedEvent;
-import com.hypersocket.resource.events.TemplateResourceDeletedEvent;
-import com.hypersocket.resource.events.TemplateResourceEvent;
-import com.hypersocket.resource.events.TemplateResourceUpdatedEvent;
+import com.hypersocket.resource.AbstractResourceRepository;
+import com.hypersocket.resource.AbstractResourceServiceImpl;
+import com.hypersocket.resource.ResourceChangeException;
+import com.hypersocket.resource.ResourceCreationException;
+import com.hypersocket.template.events.TemplateResourceCreatedEvent;
+import com.hypersocket.template.events.TemplateResourceDeletedEvent;
+import com.hypersocket.template.events.TemplateResourceEvent;
+import com.hypersocket.template.events.TemplateResourceUpdatedEvent;
 
 @Service
 public class TemplateResourceServiceImpl extends

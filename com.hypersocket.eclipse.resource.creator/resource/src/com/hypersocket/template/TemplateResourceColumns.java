@@ -1,4 +1,4 @@
-package com.hypersocket.resource;
+package com.hypersocket.template;
 
 import com.hypersocket.tables.Column;
 

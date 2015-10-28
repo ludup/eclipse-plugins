@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
-package com.hypersocket.resource;
+package com.hypersocket.template;
 
 import com.hypersocket.permissions.PermissionType;
 

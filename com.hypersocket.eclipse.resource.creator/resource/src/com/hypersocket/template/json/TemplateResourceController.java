@@ -1,4 +1,4 @@
-package com.hypersocket.resource.json;
+package com.hypersocket.template.json;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +30,10 @@ import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.ResourceException;
 import com.hypersocket.resource.ResourceNotFoundException;
 import com.hypersocket.resource.ResourceUpdate;
-import com.hypersocket.resource.TemplateResource;
-import com.hypersocket.resource.TemplateResourceColumns;
-import com.hypersocket.resource.TemplateResourceService;
-import com.hypersocket.resource.TemplateResourceServiceImpl;
+import com.hypersocket.template.TemplateResource;
+import com.hypersocket.template.TemplateResourceColumns;
+import com.hypersocket.template.TemplateResourceService;
+import com.hypersocket.template.TemplateResourceServiceImpl;
 import com.hypersocket.session.json.SessionTimeoutException;
 import com.hypersocket.tables.Column;
 import com.hypersocket.tables.ColumnSort;

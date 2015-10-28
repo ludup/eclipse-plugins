@@ -70,7 +70,8 @@ public class TemplateTask extends AbstractTaskProvider {
 	public TaskResult execute(Task task, Realm currentRealm, SystemEvent event)
 			throws ValidationException {
 
-		return null;
+		// Task is performed here
+		return new TemplateTaskResult(this, true, currentRealm, task);
 	}
 	
 	public String[] getResultResourceKeys() {
