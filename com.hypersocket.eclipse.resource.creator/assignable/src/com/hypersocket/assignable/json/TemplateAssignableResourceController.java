@@ -114,8 +114,8 @@ public class TemplateAssignableResourceController extends ResourceController {
 					new BootstrapTablePageProcessor() {
 
 						@Override
-						public Column getColumn(int col) {
-							return TemplateAssignableResourceColumns.values()[col];
+						public Column getColumn(String col) {
+							return AssignableResourceResourceColumns.valueOf(col.toUpperCase());
 						}
 
 						@Override
@@ -303,8 +303,8 @@ public class TemplateAssignableResourceController extends ResourceController {
 					new BootstrapTablePageProcessor() {
 
 						@Override
-						public Column getColumn(int col) {
-							return ResourceColumns.values()[col];
+						public Column getColumn(String col) {
+							return AssignableResourceResourceColumns.valueOf(col.toUpperCase());
 						}
 
 						@Override

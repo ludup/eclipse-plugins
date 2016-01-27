@@ -89,8 +89,8 @@ public class TemplateResourceController extends ResourceController {
 					new BootstrapTablePageProcessor() {
 
 						@Override
-						public Column getColumn(int col) {
-							return TemplateResourceColumns.values()[col];
+						public Column getColumn(String col) {
+							return TestResourceResourceColumns.valueOf(col.toUpperCase());
 						}
 
 						@Override

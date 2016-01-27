@@ -4,9 +4,9 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.hypersocket.realm.Realm;
 import com.hypersocket.tasks.Task;
-import com.hypersocket.triggers.TaskResult;
+import com.hypersocket.triggers.AbstractTaskResult;
 
-public class TemplateTaskResult extends TaskResult {
+public class TemplateTaskResult extends AbstractTaskResult {
 
 	public static final String EVENT_RESOURCE_KEY = "<resource>.result";
 	
