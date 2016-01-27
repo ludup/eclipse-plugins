@@ -9,6 +9,6 @@
   </parent>
   <groupId>com.hypersocket</groupId>
   <artifactId>com.hypersocket.eclipse.resource.creator</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>eclipse-plugin</packaging>
 </project>
