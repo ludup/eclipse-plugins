@@ -10,7 +10,7 @@ import com.hypersocket.properties.PropertyCategory;
 import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.AbstractAssignableResourceService;
 import com.hypersocket.resource.ResourceChangeException;
-import com.hypersocket.resource.ResourceCreationException;
+import com.hypersocket.resource.ResourceException;
 
 
 public interface TemplateAssignableResourceService extends
@@ -22,10 +22,10 @@ public interface TemplateAssignableResourceService extends
 	 */
 	
 	TemplateAssignableResource updateResource(TemplateAssignableResource resourceById, String name,
-			Set<Role> roles, Map<String,String> properties) throws ResourceChangeException, AccessDeniedException;
+			Set<Role> roles, Map<String,String> properties) throws ResourceException, AccessDeniedException;
 
 	TemplateAssignableResource createResource(String name, Set<Role> roles, Realm realm, Map<String,String> properties)
-			throws ResourceCreationException, AccessDeniedException;
+			throws ResourceException, AccessDeniedException;
 
 	Collection<PropertyCategory> getPropertyTemplate(
 			TemplateAssignableResource resource) throws AccessDeniedException;

@@ -14,10 +14,10 @@ public interface TemplateResourceService extends
 		AbstractResourceService<TemplateResource> {
 
 	TemplateResource updateResource(TemplateResource resourceById, String name, Map<String,String> properties)
-			throws ResourceChangeException, AccessDeniedException;
+			throws ResourceException, AccessDeniedException;
 
 	TemplateResource createResource(String name, Realm realm, Map<String,String> properties)
-			throws ResourceCreationException, AccessDeniedException;
+			throws ResourceException, AccessDeniedException;
 
 	Collection<PropertyCategory> getPropertyTemplate() throws AccessDeniedException;
 

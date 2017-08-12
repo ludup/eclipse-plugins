@@ -25,6 +25,7 @@ import com.hypersocket.template.events.TemplateResourceCreatedEvent;
 import com.hypersocket.template.events.TemplateResourceDeletedEvent;
 import com.hypersocket.template.events.TemplateResourceEvent;
 import com.hypersocket.template.events.TemplateResourceUpdatedEvent;
+import com.hypersocket.properties.EntityResourcePropertyStore;
 
 @Service
 public class TemplateResourceServiceImpl extends
@@ -90,7 +91,7 @@ public class TemplateResourceServiceImpl extends
 				TemplateResourceDeletedEvent.class, RESOURCE_BUNDLE,
 				this);
 
-		repository.getEntityStore().registerResourceService(TemplateResource.class, repository);
+		EntityResourcePropertyStore.registerResourceService(TemplateResource.class, repository);
 	}
 
 	@Override
@@ -154,7 +155,7 @@ public class TemplateResourceServiceImpl extends
 	@Override
 	public TemplateResource updateResource(TemplateResource resource,
 			String name, Map<String, String> properties)
-			throws ResourceChangeException, AccessDeniedException {
+			throws ResourceException, AccessDeniedException {
 
 		resource.setName(name);
 
@@ -172,7 +173,7 @@ public class TemplateResourceServiceImpl extends
 
 	@Override
 	public TemplateResource createResource(String name, Realm realm,
-			Map<String, String> properties) throws ResourceCreationException,
+			Map<String, String> properties) throws ResourceException,
 			AccessDeniedException {
 
 		TemplateResource resource = new TemplateResource();

@@ -212,6 +212,7 @@ public class NewResourceWizardPage extends WizardPage {
 	 * Ensures that both text fields are set.
 	 */
 
+	@SuppressWarnings("deprecation")
 	private void dialogChanged() {
 		IResource container = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(getContainerName()));

@@ -33,7 +33,7 @@ import com.hypersocket.json.ResourceStatus;
 import com.hypersocket.permissions.AccessDeniedException;
 import com.hypersocket.permissions.Role;
 import com.hypersocket.properties.PropertyCategory;
-import com.hypersocket.properties.json.PropertyItem;
+import com.hypersocket.json.PropertyItem;
 import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.AssignableResourceUpdate;
 import com.hypersocket.resource.ResourceColumns;
@@ -101,7 +101,7 @@ public class TemplateAssignableResourceController extends ResourceController {
 	@RequestMapping(value = "<resources>/table", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
-	public BootstrapTableResult tableResources(
+	public BootstrapTableResult<?> tableResources(
 			final HttpServletRequest request, HttpServletResponse response)
 			throws AccessDeniedException, UnauthorizedException,
 			SessionTimeoutException {
@@ -291,7 +291,7 @@ public class TemplateAssignableResourceController extends ResourceController {
 	@RequestMapping(value = "<resources>/personal", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
-	public BootstrapTableResult personalResources(final HttpServletRequest request,
+	public BootstrapTableResult<?> personalResources(final HttpServletRequest request,
 			HttpServletResponse response) throws AccessDeniedException,
 			UnauthorizedException, SessionTimeoutException {
 

@@ -21,12 +21,13 @@ import com.hypersocket.permissions.AccessDeniedException;
 import com.hypersocket.permissions.PermissionCategory;
 import com.hypersocket.permissions.PermissionService;
 import com.hypersocket.permissions.Role;
+import com.hypersocket.properties.EntityResourcePropertyStore;
 import com.hypersocket.properties.PropertyCategory;
 import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.AbstractAssignableResourceRepository;
 import com.hypersocket.resource.AbstractAssignableResourceServiceImpl;
 import com.hypersocket.resource.ResourceChangeException;
-import com.hypersocket.resource.ResourceCreationException;
+import com.hypersocket.resource.ResourceException;
 
 @Service
 public class TemplateAssignableResourceServiceImpl extends
@@ -98,7 +99,7 @@ public class TemplateAssignableResourceServiceImpl extends
 		eventService.registerEvent(TemplateAssignableResourceUpdatedEvent.class, RESOURCE_BUNDLE);
 		eventService.registerEvent(TemplateAssignableResourceDeletedEvent.class, RESOURCE_BUNDLE);
 
-		repository.getEntityStore().registerResourceService(TemplateAssignableResource.class, repository);
+		EntityResourcePropertyStore..registerResourceService(TemplateAssignableResource.class, repository);
 
 	}
 
@@ -149,11 +150,9 @@ public class TemplateAssignableResourceServiceImpl extends
 
 	@Override
 	public TemplateAssignableResource updateResource(TemplateAssignableResource resource, String name, Set<Role> roles,
-			Map<String, String> properties) throws ResourceChangeException, AccessDeniedException {
+			Map<String, String> properties) throws ResourceException, AccessDeniedException {
 
 		resource.setName(name);
-		resource.getRoles().clear();
-		resource.getRoles().addAll(roles);
 
 		/**
 		 * Set any additional fields on your resource here before calling
@@ -162,14 +161,14 @@ public class TemplateAssignableResourceServiceImpl extends
 		 * Remember to fill in the fire*Event methods to ensure events are fired
 		 * for all operations.
 		 */
-		updateResource(resource, properties);
+		updateResource(resource, roles, properties);
 
 		return resource;
 	}
 
 	@Override
 	public TemplateAssignableResource createResource(String name, Set<Role> roles, Realm realm,
-			Map<String, String> properties) throws ResourceCreationException, AccessDeniedException {
+			Map<String, String> properties) throws ResourceException, AccessDeniedException {
 
 		TemplateAssignableResource resource = new TemplateAssignableResource();
 		resource.setName(name);

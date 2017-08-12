@@ -49,18 +49,6 @@
 					});
 				}
 				
-				$('#<resource>Properties').propertyPage({
-					url : '<resources>/template',
-					showButtons : false,
-					useTemplates : true,
-					canUpdate : currentMenu.canUpdate,
-					propertyTabsLast: false,
-					additionalTabs : [{
-							id : "tabRoles",
-							name : getResource("label.roles")
-					}]
-				});
-
 				$('#content<Resources>').ajaxResourcePage(
 						{
 							id : "<Resource>",
