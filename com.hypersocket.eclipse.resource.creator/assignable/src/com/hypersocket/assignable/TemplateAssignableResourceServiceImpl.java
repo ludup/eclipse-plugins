@@ -99,7 +99,7 @@ public class TemplateAssignableResourceServiceImpl extends
 		eventService.registerEvent(TemplateAssignableResourceUpdatedEvent.class, RESOURCE_BUNDLE);
 		eventService.registerEvent(TemplateAssignableResourceDeletedEvent.class, RESOURCE_BUNDLE);
 
-		EntityResourcePropertyStore..registerResourceService(TemplateAssignableResource.class, repository);
+		EntityResourcePropertyStore.registerResourceService(TemplateAssignableResource.class, repository);
 
 	}
 
