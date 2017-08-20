@@ -40,12 +40,12 @@
 				$('#content<Resources>').localize();
 					
 				if(currentMenu.canCreate || currentMenu.canUpdate) {
-					getJSON('roles/list', null, function(data) {
-						$('#tabRoles').multipleSelect({
-							values : data.resources,
-							selectedIsObjectList : true,
-							resourceKey : '<resource>'
-						});
+					$('#tabRoles').multipleSearchInput({
+						url: 'roles/table',
+						isNamePairValue: false,
+						selectedIsObjectList : true,
+						resourceKey : '<resource>',
+						disabled: !currentMenu.canUpdate
 					});
 				}
 				
@@ -97,7 +97,7 @@
 									});
 								}
 								
-								$('#tabRoles').multipleSelect();
+								$('#tabRoles').multipleSearchInput();
 								$('.tabPropertiesTab').first().trigger('click');
 							},
 							createResource : function() {
@@ -131,7 +131,9 @@
 											}]
 								});
 								
-								$('#tabRoles').multipleSelect({
+								$('#tabRoles').multipleSearchInput({
+									url: 'roles/table',
+									isNamePairValue: false,
 									selected : resource.roles,
 									selectedIsObjectList : true,
 									resourceKey : '<resource>'
