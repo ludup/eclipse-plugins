@@ -8,6 +8,8 @@ import com.hypersocket.triggers.AbstractTaskResult;
 
 public class TemplateTaskResult extends AbstractTaskResult {
 
+	private static final long serialVersionUID = 1L;
+	
 	public static final String EVENT_RESOURCE_KEY = "<resource>.result";
 	
 	public TemplateTaskResult(Object source, 

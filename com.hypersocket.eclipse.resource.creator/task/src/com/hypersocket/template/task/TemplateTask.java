@@ -82,5 +82,10 @@ public class TemplateTask extends AbstractTaskProvider {
 	public ResourceTemplateRepository getRepository() {
 		return repository;
 	}
+	
+	@Override
+	public boolean isSystem() {
+		return true;
+	}
 
 }
