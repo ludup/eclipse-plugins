@@ -76,7 +76,7 @@ public class TemplateResourceController extends ResourceController {
 	@RequestMapping(value = "<resources>/table", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
-	public BootstrapTableResult tableResources(
+	public BootstrapTableResult<?> tableResources(
 			final HttpServletRequest request, HttpServletResponse response)
 			throws AccessDeniedException, UnauthorizedException,
 			SessionTimeoutException {
