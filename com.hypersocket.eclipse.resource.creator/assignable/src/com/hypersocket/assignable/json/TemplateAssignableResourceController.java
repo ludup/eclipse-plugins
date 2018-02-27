@@ -32,6 +32,7 @@ import com.hypersocket.json.ResourceList;
 import com.hypersocket.json.ResourceStatus;
 import com.hypersocket.permissions.AccessDeniedException;
 import com.hypersocket.permissions.Role;
+import com.hypersocket.permissions.RoleUtils;
 import com.hypersocket.properties.PropertyCategory;
 import com.hypersocket.json.PropertyItem;
 import com.hypersocket.realm.Realm;
@@ -215,10 +216,7 @@ public class TemplateAssignableResourceController extends ResourceController {
 
 			Realm realm = sessionUtils.getCurrentRealm(request);
 
-			Set<Role> roles = new HashSet<Role>();
-			for (Long id : resource.getRoles()) {
-				roles.add(permissionRepository.getRoleById(id));
-			}
+			Set<Role> roles = RoleUtils.processPermissions(resource.getRoles());
 			
 			Map<String, String> properties = new HashMap<String, String>();
 			for (PropertyItem i : resource.getProperties()) {
