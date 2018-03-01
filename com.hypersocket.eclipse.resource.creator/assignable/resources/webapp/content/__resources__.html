@@ -38,16 +38,8 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 				$('#content<Resources>').localize();
-					
-				if(currentMenu.canCreate || currentMenu.canUpdate) {
-					$('#tabRoles').multipleSearchInput({
-						url: 'roles/table',
-						isNamePairValue: false,
-						selectedIsObjectList : true,
-						resourceKey : '<resource>',
-						disabled: !currentMenu.canUpdate
-					});
-				}
+				
+				$('#tabRoles').roles();
 				
 				$('#content<Resources>').ajaxResourcePage(
 						{
@@ -97,7 +89,13 @@
 									});
 								}
 								
-								$('#tabRoles').multipleSearchInput();
+								$('#tabRoles').widget().clear();
+								if((create && currentMenu.canCreate) || (!create && currentMenu.canUpdate)) {
+									$('#tabRoles').widget().enable();
+								} else {
+									$('#tabRoles').widget().disable();
+								}
+								
 								$('.tabPropertiesTab').first().trigger('click');
 							},
 							createResource : function() {
@@ -110,7 +108,7 @@
 											resource.properties = items;
 								});
 								
-								resource.roles = $('#tabRoles').multipleSelectValues();
+								resource.roles = $('#tabRoles').widget().getValue();
 								
 								return resource;
 							},
@@ -131,13 +129,11 @@
 											}]
 								});
 								
-								$('#tabRoles').multipleSearchInput({
-									url: 'roles/table',
-									isNamePairValue: false,
-									selected : resource.roles,
-									selectedIsObjectList : true,
-									resourceKey : '<resource>'
-								});
+								$('#tabRoles').widget().setValue(resource.roles);
+								
+								if(readOnly) {
+									$('#tabRoles').widget().disable();
+								} 
 							},
 							complete : function() {
 								loadComplete();

@@ -21,24 +21,25 @@ import com.hypersocket.auth.json.AuthenticationRequired;
 import com.hypersocket.auth.json.ResourceController;
 import com.hypersocket.auth.json.UnauthorizedException;
 import com.hypersocket.i18n.I18N;
+import com.hypersocket.json.PropertyItem;
 import com.hypersocket.json.ResourceList;
 import com.hypersocket.json.ResourceStatus;
+import com.hypersocket.json.ResourceUpdate;
 import com.hypersocket.permissions.AccessDeniedException;
 import com.hypersocket.properties.PropertyCategory;
-import com.hypersocket.json.PropertyItem;
 import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.ResourceException;
 import com.hypersocket.resource.ResourceNotFoundException;
-import com.hypersocket.resource.ResourceUpdate;
+import com.hypersocket.session.json.SessionTimeoutException;
+import com.hypersocket.tables.BootstrapTableResult;
+import com.hypersocket.tables.Column;
+import com.hypersocket.tables.ColumnSort;
+import com.hypersocket.tables.json.BootstrapTablePageProcessor;
 import com.hypersocket.template.TemplateResource;
 import com.hypersocket.template.TemplateResourceColumns;
 import com.hypersocket.template.TemplateResourceService;
 import com.hypersocket.template.TemplateResourceServiceImpl;
-import com.hypersocket.session.json.SessionTimeoutException;
-import com.hypersocket.tables.Column;
-import com.hypersocket.tables.ColumnSort;
-import com.hypersocket.tables.BootstrapTableResult;
-import com.hypersocket.tables.json.BootstrapTablePageProcessor;
+
 
 @Controller
 public class TemplateResourceController extends ResourceController {
