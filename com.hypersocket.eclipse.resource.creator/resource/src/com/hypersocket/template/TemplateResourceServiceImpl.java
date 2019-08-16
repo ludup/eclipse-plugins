@@ -34,19 +34,19 @@ public class TemplateResourceServiceImpl extends
 	public static final String RESOURCE_BUNDLE = "<Resource>ResourceService";
 
 	@Autowired
-	TemplateResourceRepository repository;
+	private TemplateResourceRepository repository;
 
 	@Autowired
-	I18NService i18nService;
+	private I18NService i18nService;
 
 	@Autowired
-	PermissionService permissionService;
+	private PermissionService permissionService;
 
 	@Autowired
-	MenuService menuService;
+	private MenuService menuService;
 
 	@Autowired
-	EventService eventService;
+	private EventService eventService;
 
 	public TemplateResourceServiceImpl() {
 		super("<Resource>");

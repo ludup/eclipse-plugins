@@ -10,7 +10,6 @@ import com.hypersocket.resource.RealmResource;
 public class TemplateResource extends RealmResource {
 
 	/**
-	 * TODO put your entities table name in the annotation above. Add
-	 * any further fields your resource requires.
+	 * TODO Add any further fields your resource requires.
 	 */
 }

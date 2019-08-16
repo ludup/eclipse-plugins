@@ -9,10 +9,7 @@ public class TemplateResourceUpdatedEvent extends
 		TemplateResourceEvent {
 
 	/**
-	 * TODO rename to suit your resource and replace <resource> with lower case
-	 * name of your resource.
-	 * 
-	 * You typically add attributes to the base TemplateAssignableResourceEvent
+	 * TODO You typically add attributes to the base TemplateAssignableResourceEvent
 	 * class so these can be reused across all resource events.
 	 */
 	public static final String EVENT_RESOURCE_KEY = "<resource>.updated";

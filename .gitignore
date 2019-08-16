@@ -1,1 +1,5 @@
 *.DS_Store
+/.project
+/build.properties
+/META-INF/MANIFEST.MF
+/.settings/org.eclipse.m2e.core.prefs
