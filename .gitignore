@@ -3,3 +3,6 @@
 /build.properties
 /META-INF/MANIFEST.MF
 /.settings/org.eclipse.m2e.core.prefs
+/.settings/
+/META-INF/
+.mvn
