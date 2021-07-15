@@ -203,7 +203,7 @@ public class NewTaskWizard extends Wizard implements INewWizard {
 		Bundle bundle = Platform.getBundle("com.hypersocket.eclipse.resource.creator");
 		Path path = new Path(sourcePath);
 		URL sourceURL = FileLocator.find(bundle, path, null);
-		FileHelper.copyResource(sourceURL, target, resourceName, packageName, "fa-flash");
+		FileHelper.copyResource(sourceURL, target, resourceName, packageName, "fa-hand-sparkles");
 		
 	}
 	

@@ -124,7 +124,7 @@ public class NewResourceWizardPage extends WizardPage {
 		label.setText("&Icon Name:");
 
 		iconText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		iconText.setText("fa-flash");
+		iconText.setText("fa-sparkles");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		iconText.setLayoutData(gd);
