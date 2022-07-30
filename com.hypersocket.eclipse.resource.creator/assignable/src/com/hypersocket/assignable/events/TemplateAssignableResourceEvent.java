@@ -6,6 +6,7 @@ import com.hypersocket.assignable.TemplateAssignableResource;
 import com.hypersocket.resource.AssignableResourceEvent;
 import com.hypersocket.session.Session;
 
+@SuppressWarnings("serial")
 public class TemplateAssignableResourceEvent extends AssignableResourceEvent {
 
 //	public static final String ATTR_NAME = "attr.name";

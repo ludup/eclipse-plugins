@@ -6,6 +6,7 @@ import com.hypersocket.realm.events.ResourceEvent;
 import com.hypersocket.template.TemplateResource;
 import com.hypersocket.session.Session;
 
+@SuppressWarnings("serial")
 public class TemplateResourceEvent extends ResourceEvent {
 
 	public static final String EVENT_RESOURCE_KEY = "<resource>.event";

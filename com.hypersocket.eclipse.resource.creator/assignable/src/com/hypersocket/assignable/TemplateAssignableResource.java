@@ -7,6 +7,7 @@ import com.hypersocket.resource.AssignableResource;
 
 @Entity
 @Table(name="<resource>_resource")
+@SuppressWarnings("serial")
 public class TemplateAssignableResource extends AssignableResource {
 
 	/**

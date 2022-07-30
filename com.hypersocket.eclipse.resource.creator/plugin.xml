@@ -5,12 +5,12 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="hypersocket-eclipse-resource-creator"
-            name="Hypersocket">
+            name="LogonBox">
       </category>
       <wizard
             category="hypersocket-eclipse-resource-creator"
             class="com.hypersocket.eclipse.resources.NewResourceWizard"
-            icon="icons/hypersocket-icon16x16.png"
+            icon="icons/logonbox-icon16x16.png"
             id="com.hypersocket.eclipse.resources.NewResourceWizard"
             name="New Resource">
       </wizard>
@@ -19,12 +19,12 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="hypersocket-eclipse-resource-creator"
-            name="Hypersocket">
+            name="LogonBox">
       </category>
       <wizard
             category="hypersocket-eclipse-resource-creator"
             class="com.hypersocket.eclipse.resources.NewTaskWizard"
-            icon="icons/hypersocket-icon16x16.png"
+            icon="icons/logonbox-icon16x16.png"
             id="com.hypersocket.eclipse.resources.NewTaskWizard"
             name="New Task">
       </wizard>

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.hypersocket.assignable.TemplateAssignableResource;
 import com.hypersocket.session.Session;
 
+@SuppressWarnings("serial")
 public class TemplateAssignableResourceUpdatedEvent extends
 		TemplateAssignableResourceEvent {
 

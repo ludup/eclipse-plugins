@@ -26,7 +26,6 @@ import com.hypersocket.properties.PropertyCategory;
 import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.AbstractAssignableResourceRepository;
 import com.hypersocket.resource.AbstractAssignableResourceServiceImpl;
-import com.hypersocket.resource.ResourceChangeException;
 import com.hypersocket.resource.ResourceException;
 
 @Service

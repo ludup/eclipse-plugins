@@ -1,5 +1,6 @@
 package com.hypersocket.template.task;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -26,16 +27,16 @@ public class TemplateTask extends AbstractTaskProvider {
 	public static final String RESOURCE_BUNDLE = "<Resource>Task";
 	
 	@Autowired
-	TemplateTaskRepository repository;
+	private TemplateTaskRepository repository;
 
 	@Autowired
-	TaskProviderService taskService;
+	private TaskProviderService taskService;
 
 	@Autowired
-	EventService eventService;
+	private EventService eventService;
 
 	@Autowired
-	I18NService i18nService; 
+	private I18NService i18nService; 
 
 	public TemplateTask() {
 	}
@@ -67,15 +68,16 @@ public class TemplateTask extends AbstractTaskProvider {
 	}
 
 	@Override
-	public TaskResult execute(Task task, Realm currentRealm, SystemEvent event)
+	public TaskResult execute(Task task, Realm currentRealm, List<SystemEvent> event)
 			throws ValidationException {
 
 		// Task is performed here
 		return new TemplateTaskResult(this, true, currentRealm, task);
 	}
-	
-	public String[] getResultResourceKeys() {
-		return new String[] { TemplateTaskResult.EVENT_RESOURCE_KEY };
+
+	@Override
+	public String getResultResourceKey() {
+		return TemplateTaskResult.EVENT_RESOURCE_KEY;
 	}
 
 	@Override

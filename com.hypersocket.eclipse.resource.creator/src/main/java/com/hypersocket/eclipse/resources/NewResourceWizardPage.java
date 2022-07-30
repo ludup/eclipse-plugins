@@ -48,7 +48,7 @@ public class NewResourceWizardPage extends WizardPage {
 	
 	private ISelection selection;
 	
-	private IProject selectedProject;
+//	private IProject selectedProject;
 	
 
 	/**
@@ -124,7 +124,7 @@ public class NewResourceWizardPage extends WizardPage {
 		label.setText("&Icon Name:");
 
 		iconText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		iconText.setText("fa-sparkles");
+		iconText.setText("fa-bolt");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		iconText.setLayoutData(gd);
@@ -167,10 +167,17 @@ public class NewResourceWizardPage extends WizardPage {
 					container = (IContainer) obj;
 				else
 					container = ((IResource) obj).getParent();
-				containerText.setText(container.getFullPath().toString());
+				containerText.setText(stripLeadingSlash(container.getFullPath().toString()));
+				dialogChanged();
 			}
 		}
 		fileText.setText("");
+	}
+
+	private String stripLeadingSlash(String string) {
+		while(string.startsWith("/"))
+			string = string.substring(1);
+		return string;
 	}
 
 	/**
@@ -202,7 +209,7 @@ public class NewResourceWizardPage extends WizardPage {
 		if (dialog.open() == ElementListSelectionDialog.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1) {
-				selectedProject = (IProject) result[0];
+				IProject selectedProject = (IProject) result[0];
 				containerText.setText(selectedProject.getName());
 			}
 		}
@@ -241,6 +248,10 @@ public class NewResourceWizardPage extends WizardPage {
 			updateStatus("Resource name must be valid");
 			return;
 		}
+		if (resourceName.toLowerCase().endsWith("resource")) {
+			updateStatus("Resource name should not end with 'Resource'");
+			return;
+		}
 		
 		if(!JavaConventions.validateJavaTypeName(resourceName).isOK()) {
 			updateStatus("Resource name will not generate a valid Java class");
@@ -258,11 +269,22 @@ public class NewResourceWizardPage extends WizardPage {
 		}
 
 		updateStatus(null);
+		
+		if (resourceName.endsWith("s")) {
+			updateWarn("Resource name should probably not be plural");
+		}
+		else
+			updateWarn(null);
 	}
 
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
+	}
+
+	private void updateWarn(String message) {
+		setMessage(message, WARNING);
+		setPageComplete(getErrorMessage() == null);
 	}
 
 	public String getContainerName() {
@@ -286,6 +308,7 @@ public class NewResourceWizardPage extends WizardPage {
 	}
 
 	public IProject getSelectedProject() {
-		return selectedProject;
+		return (IProject) ResourcesPlugin.getWorkspace().getRoot()
+				.findMember(new Path(getContainerName()));
 	}
 }

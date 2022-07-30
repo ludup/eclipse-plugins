@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.hypersocket.template.TemplateResource;
 import com.hypersocket.session.Session;
 
+@SuppressWarnings("serial")
 public class TemplateResourceDeletedEvent extends
 		TemplateResourceEvent {
 

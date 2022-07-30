@@ -1,8 +1,8 @@
 package com.hypersocket.template.json;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.hypersocket.auth.json.AuthenticationRequired;
 import com.hypersocket.auth.json.ResourceController;
 import com.hypersocket.auth.json.UnauthorizedException;
+import com.hypersocket.context.AuthenticatedContext;
 import com.hypersocket.i18n.I18N;
-import com.hypersocket.json.PropertyItem;
 import com.hypersocket.json.ResourceList;
 import com.hypersocket.json.ResourceStatus;
 import com.hypersocket.json.ResourceUpdate;
 import com.hypersocket.permissions.AccessDeniedException;
 import com.hypersocket.properties.PropertyCategory;
-import com.hypersocket.realm.Realm;
 import com.hypersocket.resource.ResourceException;
 import com.hypersocket.resource.ResourceNotFoundException;
 import com.hypersocket.session.json.SessionTimeoutException;
@@ -52,148 +51,114 @@ public class TemplateResourceController extends ResourceController {
 	 * <resource> with "application" and <Resource> with "Application"
 	 */
 	@Autowired
-	TemplateResourceService resourceService;
+	private TemplateResourceService resourceService;
 
 	@AuthenticationRequired
 	@RequestMapping(value = "<resources>/list", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public ResourceList<TemplateResource> getResources(HttpServletRequest request,
 			HttpServletResponse response) throws AccessDeniedException,
 			UnauthorizedException, SessionTimeoutException {
 
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
-		try {
-			return new ResourceList<TemplateResource>(
-					resourceService.getResources(sessionUtils
-							.getCurrentRealm(request)));
-		} finally {
-			clearAuthenticatedContext();
-		}
+		return new ResourceList<>(
+				resourceService.getResources(sessionUtils
+						.getCurrentRealm(request)));
 	}
 	
 	@AuthenticationRequired
 	@RequestMapping(value = "<resources>/table", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public BootstrapTableResult<?> tableResources(
 			final HttpServletRequest request, HttpServletResponse response)
 			throws AccessDeniedException, UnauthorizedException,
 			SessionTimeoutException {
 
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
-
-		try {
 			return processDataTablesRequest(request,
-					new BootstrapTablePageProcessor() {
+				new BootstrapTablePageProcessor() {
 
-						@Override
-						public Column getColumn(String col) {
-							return TemplateResourceColumns.valueOf(col.toUpperCase());
-						}
+					@Override
+					public Column getColumn(String col) {
+						return TemplateResourceColumns.valueOf(col.toUpperCase());
+					}
 
-						@Override
-						public List<?> getPage(String searchColumn, String searchPattern, int start,
-								int length, ColumnSort[] sorting)
-								throws UnauthorizedException,
-								AccessDeniedException {
-							return resourceService.searchResources(
-									sessionUtils.getCurrentRealm(request),
-									searchColumn, searchPattern, start, length, sorting);
-						}
+					@Override
+					public List<?> getPage(String searchColumn, String searchPattern, int start,
+							int length, ColumnSort[] sorting)
+							throws UnauthorizedException,
+							AccessDeniedException {
+						return resourceService.searchResources(
+								sessionUtils.getCurrentRealm(request),
+								searchColumn, searchPattern, start, length, sorting);
+					}
 
-						@Override
-						public Long getTotalCount(String searchColumn, String searchPattern)
-								throws UnauthorizedException,
-								AccessDeniedException {
-							return resourceService.getResourceCount(
-									sessionUtils.getCurrentRealm(request),
-									searchColumn, searchPattern);
-						}
-					});
-		} finally {
-			clearAuthenticatedContext();
-		}
+					@Override
+					public Long getTotalCount(String searchColumn, String searchPattern)
+							throws UnauthorizedException,
+							AccessDeniedException {
+						return resourceService.getResourceCount(
+								sessionUtils.getCurrentRealm(request),
+								searchColumn, searchPattern);
+					}
+				});
 	}
 
 	@AuthenticationRequired
 	@RequestMapping(value = "<resources>/template", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public ResourceList<PropertyCategory> getResourceTemplate(
 			HttpServletRequest request) throws AccessDeniedException,
 			UnauthorizedException, SessionTimeoutException {
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
-
-		try {
-			return new ResourceList<PropertyCategory>(resourceService.getPropertyTemplate());
-		} finally {
-			clearAuthenticatedContext();
-		}
+		return new ResourceList<>(resourceService.getPropertyTemplate());
 	}
 	
 	@AuthenticationRequired
 	@RequestMapping(value = "<resources>/properties/{id}", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public ResourceList<PropertyCategory> getActionTemplate(
 			HttpServletRequest request, @PathVariable Long id)
 			throws AccessDeniedException, UnauthorizedException,
 			SessionTimeoutException, ResourceNotFoundException {
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
-		try {
-			TemplateResource resource = resourceService.getResourceById(id);
-			return new ResourceList<PropertyCategory>(resourceService.getPropertyTemplate(resource));
-		} finally {
-			clearAuthenticatedContext();
-		}
+		return new ResourceList<>(resourceService.getPropertyTemplate(resourceService.getResourceById(id)));
 	}
 
 	@AuthenticationRequired
 	@RequestMapping(value = "<resources>/<resource>/{id}", method = RequestMethod.GET, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public TemplateResource getResource(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("id") Long id)
 			throws AccessDeniedException, UnauthorizedException,
 			ResourceNotFoundException, SessionTimeoutException {
-
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
-		try {
-			return resourceService.getResourceById(id);
-		} finally {
-			clearAuthenticatedContext();
-		}
-
+		return resourceService.getResourceById(id);
 	}
 
 	@AuthenticationRequired
 	@RequestMapping(value = "<resources>/<resource>", method = RequestMethod.POST, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public ResourceStatus<TemplateResource> createOrUpdateResource(
 			HttpServletRequest request, HttpServletResponse response,
 			@RequestBody ResourceUpdate resource)
 			throws AccessDeniedException, UnauthorizedException,
 			SessionTimeoutException {
 
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
 		try {
 
 			TemplateResource newResource;
 
-			Realm realm = sessionUtils.getCurrentRealm(request);
-
-			Map<String, String> properties = new HashMap<String, String>();
-			for (PropertyItem i : resource.getProperties()) {
-				properties.put(i.getId(), i.getValue());
-			}
+			var realm = sessionUtils.getCurrentRealm(request);
+			var properties = Stream.of(resource.getProperties()).collect(
+					Collectors.toMap(i -> i.getId(), i -> i.getValue()));
 			
 			if (resource.getId() != null) {
 				newResource = resourceService.updateResource(
@@ -205,7 +170,7 @@ public class TemplateResourceController extends ResourceController {
 						realm,
 						properties);
 			}
-			return new ResourceStatus<TemplateResource>(newResource,
+			return new ResourceStatus<>(newResource,
 					I18N.getResource(sessionUtils.getLocale(request),
 							TemplateResourceServiceImpl.RESOURCE_BUNDLE,
 							resource.getId() != null ? "resource.updated.info"
@@ -213,10 +178,8 @@ public class TemplateResourceController extends ResourceController {
 									.getName()));
 
 		} catch (ResourceException e) {
-			return new ResourceStatus<TemplateResource>(false,
+			return new ResourceStatus<>(false,
 					e.getMessage());
-		} finally {
-			clearAuthenticatedContext();
 		}
 	}
 
@@ -225,16 +188,15 @@ public class TemplateResourceController extends ResourceController {
 	@RequestMapping(value = "<resources>/<resource>/{id}", method = RequestMethod.DELETE, produces = { "application/json" })
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
+	@AuthenticatedContext
 	public ResourceStatus<TemplateResource> deleteResource(
 			HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("id") Long id) throws AccessDeniedException,
 			UnauthorizedException, SessionTimeoutException {
 
-		setupAuthenticatedContext(sessionUtils.getSession(request),
-				sessionUtils.getLocale(request));
 		try {
 
-			TemplateResource resource = resourceService.getResourceById(id);
+			var resource = resourceService.getResourceById(id);
 
 			if (resource == null) {
 				return new ResourceStatus<TemplateResource>(false,
@@ -243,18 +205,16 @@ public class TemplateResourceController extends ResourceController {
 								"error.invalidResourceId", id));
 			}
 
-			String preDeletedName = resource.getName();
+			var preDeletedName = resource.getName();
 			resourceService.deleteResource(resource);
 
-			return new ResourceStatus<TemplateResource>(true, I18N.getResource(
+			return new ResourceStatus<>(true, I18N.getResource(
 					sessionUtils.getLocale(request),
 					TemplateResourceServiceImpl.RESOURCE_BUNDLE,
 					"resource.deleted.info", preDeletedName));
 
 		} catch (ResourceException e) {
-			return new ResourceStatus<TemplateResource>(false, e.getMessage());
-		} finally {
-			clearAuthenticatedContext();
+			return new ResourceStatus<>(false, e.getMessage());
 		}
 	}
 }
